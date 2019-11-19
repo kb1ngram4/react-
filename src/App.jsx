@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button}from 'antd';
+import './index.less';
 //路由组件都需要router
 import{BrowserRouter as Router,Route,Switch} from 'react-router-dom'
 import routes from './config/routes';
@@ -9,7 +9,6 @@ export default class App extends Component{
     return(
       
       <Router>
-        <div><Button type="primary">按钮</Button></div>
         {/* switch保证匹配所有规则中的一个，且从上之下 */}
         <Switch>
         {
