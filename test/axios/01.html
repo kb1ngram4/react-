@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>测试axios发送请求</title>
+</head>
+<body>
+  <button id="btn1">按钮1</button>
+  <button id="btn2">按钮2</button>
+  <button id="btn3">按钮3</button>
+  <button id="btn4">按钮4</button>
+  <button id="btn5">按钮5</button>
+
+  <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+  <script>
+    const btn1 = document.getElementById('btn1');
+    const btn2 = document.getElementById('btn2');
+    const btn3 = document.getElementById('btn3');
+    const btn4 = document.getElementById('btn4');
+    const btn5 = document.getElementById('btn5');
+    
+    let token = ''
+    btn1.onclick = ()=>{
+      axios({
+        method:'post',
+        url:'http://localhost:5000/api/login',
+        data: 'username=admin&password=admin',
+        headers:{
+          'content-type':'application/x-www-form-urlencoded'
+        }
+      })
+      .then((response)=>{
+        if(response.data.status === 0){
+          console.log(response.data.data);
+          token = response.data.data.token;
+        }else{
+          alert(response.data.msg);
+        }
+      })
+      .catch((error)=>{
+        console.log(error);
+        alert('网络故障')
+        
+      })
+    }
+
+    btn2.onclick=()=>{
+      axios({
+        method:'GET',
+        url:'http://localhost:5000/api/category/get',
+        headers:{
+          authorization: 'Bearer ' + token
+        }
+      })
+      .then((response)=>{
+        if(response.data.status === 0){
+          console.log(response.data.data);
+          console.log(response);
+          
+        }else{
+          alert(response.data.msg);
+        }
+      })
+      .catch((error)=>{
+        console.log(error);
+        alert('网络故障')
+        
+      })
+    }
+
+    btn3.onclick=()=>{
+      axios({
+        method:'post',
+        url:'http://localhost:5000/api/category/add',
+        data: 'categoryName=苹果手机',
+        headers:{
+          'content-type':'application/x-www-form-urlencoded',
+          authorization:'Bearer ' + token
+        }
+      })
+      .then((response)=>{
+        if(response.data.status === 0){
+          console.log(response.data.data);
+        }else{
+          alert(response.data.msg);
+        }
+      })
+      .catch((error)=>{
+        console.log(error);
+        alert('网络出错')
+      })
+    }
+
+    btn4.onclick = ()=>{
+      axios({
+        method:'get',
+        url:'http://localhost:5000/api/user/get',
+        headers:{
+          'content-type':'application/x-www-form-urlencoded',
+          authorization:'bearer '+token
+        }
+      })
+      .then((response)=>{
+        if(response.data.status === 0){
+          console.log(response.data.data);
+          
+        }else{
+          alert(response.data.msg);
+        }
+      })
+      .catch((error)=>{
+        console.log(error);
+        alert('网络出错')
+      })
+    }
+    
+    btn5.onclick=()=>{
+      axios({
+        method:"post",
+        url:'http://localhost:5000/api/user/add',
+        data:'username=kobe&password=kobe&roleld=管理员',
+        headers:{
+          'content-type':'application/x-www-form-urlencoded',
+          authorization:'bearer '+token
+        }
+      })
+      .then((response)=>{
+        if(response.data.status === 0){
+          console.log(response.data.data);
+        }else{
+          alert(response.data.msg)
+        }
+        
+      })
+      .catch((err)=>{
+        console.log(err);
+        alert('网络错误')
+      })
+    }
+  </script>
+</body>
+</html>

@@ -4,8 +4,8 @@
 //合并和多个reducers函数
 import {combineReducers}from 'redux';
 
-import aaa from './aaa';
+import user from './user';
 //整合单个reducers函数
 export default combineReducers({
-  aaa
+  user
 })

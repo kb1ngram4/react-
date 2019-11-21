@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>测试axios发送请求</title>
+</head>
+<body>
+  <button id="btn1">按钮1</button>
+  <button id="btn2">按钮2</button>
+  <button id="btn3">按钮3</button>
+  <button id="btn4">按钮4</button>
+  <button id="btn5">按钮5</button>
+
+  <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+  <script>
+    const btn1 = document.getElementById('btn1');
+    const btn2 = document.getElementById('btn2');
+    const btn3 = document.getElementById('btn3');
+    const btn4 = document.getElementById('btn4');
+    const btn5 = document.getElementById('btn5');
+    
+    let token = ''
+    //axios提供的create方法可以自己创建实例对象
+    const axiosInstance = axios.create({
+      //基础路径，所有请求的公共路径
+      baseURL:'http://localhost:5000/api',
+      timeout: 10000,
+      headers:{
+        //公共的请求头参数
+      }
+    })
+    //拦截器：axios发送请求之前的拦截器回调函数
+    axiosInstance.interceptors.request.use(
+      //将要发送请求是成功的（内部不出错）触发回调函数
+      (config) => {
+        //可以修改请求信息
+        // console.log(config);
+        //post请求才有请求头数据
+        if(config.method === 'post'){
+          config.headers['content-type']='application/x-www-form-urlencoded';
+          //修改data数据
+          config.data = Object.keys(config.data).reduce((prev,key)=>{
+            const value = config.data[key];
+            return prev+`&${key}=${value}`
+          },'').substring(1);
+        }
+        //登录之后才会有token
+        if(token){
+          config.headers.authorization = 'bearer ' + token;
+        }
+        return config
+      },
+      //将要发送请求是失败的（内部出错）触发回调函数
+      // (error) => {
+        //一般不写
+      //   return Promise.reject(error)
+      // }
+    )
+    //响应拦截器
+    axiosInstance.interceptors.response.use(
+        (response)=>{
+          //判断成功还是失败的响应
+          if(response.data.status === 0){
+            return response.data.data;
+          }else{
+            alert(response.data.msg)
+            return Promise.reject(response.data.msg);
+          }
+        },
+        //响应失败触发的回调函数
+        (error)=>{
+          console.log(error);
+          alert(error)
+          return Promise.reject('网络出错~')         
+        }
+    )
+
+
+//登录
+    btn1.onclick = ()=>{
+      axiosInstance({
+        method:'post',
+        url:'/login',
+        data:{
+          username:'admin',
+          password:'admin'
+        }
+        // headers:{
+        //   'content-type':'application/x-www-form-urlencoded'
+        // }
+      })
+      .then((response)=>{
+        console.log(response);
+        token = response.token;       
+      })
+      // .catch((error)=>{
+      //   alert(error)       
+      // })
+    }
+//获取分类
+    btn2.onclick=()=>{
+      axiosInstance({
+        method:'',
+        url:'/category/get',
+        // headers:{
+        //   authorization: 'Bearer ' + token
+        // }
+      })
+      .then((response)=>{
+          console.log(response);         
+      })
+      // .catch((error)=>{
+      //   alert(error)
+        
+      // })
+    }
+//添加分类
+    btn3.onclick=()=>{
+      axiosInstance({
+        method:'post',
+        url:'/category/add',
+        data: {
+          categoryName:'iphone'
+        },
+        // headers:{
+        //   'content-type':'application/x-www-form-urlencoded',
+        //   authorization:'Bearer ' + token
+        // }
+      })
+      .then((response)=>{
+
+          console.log(response);
+
+      })
+      // .catch((error)=>{
+      //   alert(error)
+      // })
+    }
+//获取用户
+    btn4.onclick = ()=>{
+      axiosInstance({
+        method:'get',
+        url:'/user/get',
+        // headers:{
+        //   'content-type':'application/x-www-form-urlencoded',
+        //   authorization:'bearer '+token
+        // }
+      })
+      .then((response)=>{
+          console.log(response);
+      
+      })
+      // .catch((error)=>{
+      //   alert(error)
+      // })
+    }
+  //添加用户
+    btn5.onclick=()=>{
+      axiosInstance({
+        method:"post",
+        url:'/user/add',
+        data:{
+          username:'kobe',
+          password:'kobe',
+          roleld:'管理员'
+          }
+        // headers:{
+        //   'content-type':'application/x-www-form-urlencoded',
+        //   authorization:'bearer '+token
+        // }
+      })
+      .then((response)=>{
+          console.log(response); 
+          
+      })
+      // .catch((error)=>{
+      //   console.log(error);
+      //   alert(error)
+      // })
+    }
+  </script>
+</body>
+</html>

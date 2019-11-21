@@ -1,5 +1,5 @@
 import Home from '../components/home/index';
-import Login from '../components/login/index';
+import Login from '../containers/login/index';
 import NotFound from '../components/NotFound';
 export default[
   //命名为了APP.js 能够扩展route对象
