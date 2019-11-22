@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Layout from '../layout';
 export default class Home extends Component{
   click = (e)=>{
     e.preventDefault();
@@ -6,10 +7,6 @@ export default class Home extends Component{
     
   }
   render(){
-    return <div>
-      <form action="##" onClick ={this.click} >
-        <input type="submit"/>
-      </form>
-    </div>
+    return <Layout></Layout>
   }
 }
