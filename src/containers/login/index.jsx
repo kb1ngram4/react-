@@ -4,6 +4,7 @@ import './index.less';
 import logo from './logo.png';
 import { connect } from 'react-redux';
 import { getUserAsync } from '../../redux/action-creators/user';
+import { setItem } from '../../utils/storage';
 const {Item} = Form
 @connect(null,{getUserAsync})
 @Form.create()
@@ -46,7 +47,8 @@ class Login extends Component{
         this.props
           .getUserAsync(username,password)//返回值不是promise对象
           .then((response)=>{
-            console.log(response);
+            //持久化存储数据
+            setItem('user',response);
             
               this.props.history.push('/')
           })
