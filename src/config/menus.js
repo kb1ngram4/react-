@@ -7,7 +7,7 @@ export default [
   {
     title:'商品',
     icon:'appstore',
-    path:'',
+    path:'/product',
     children:[
       {
         title:'分类管理',
@@ -35,7 +35,7 @@ export default [
   {
     title:'图形图表',
     icon:'area-chart',
-    path:'',
+    path:'/charts',
     children:[
       {
         title:'柱状图',

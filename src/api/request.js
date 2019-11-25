@@ -7,6 +7,9 @@ import codeMessage from '../config/code-message';
 
 import {message}from 'antd';
 import store from '../redux/store';
+import { removeItem } from '../utils/storage';
+import { removeUserSync } from '../redux/action-creators/user';
+import history from '../utils/history'
 //axios提供的create方法可以自己创建实例对象
 const axiosInstance = axios.create({
   //基础路径，所有请求的公共路径
@@ -64,6 +67,18 @@ axiosInstance.interceptors.response.use(
       //服务器返回响应
       if(error.response){
         errorMessage = codeMessage[error.response.status] || '未知错误';
+        //说明token有问题
+        if(error.response.status === 401){
+          /*
+            清除token(localstorage中的，redux中的)，再重定向到login
+            清除token之前先清空数据，再跳转
+          */
+         removeItem();//清空本地token
+         //清空redux中token
+         //调用actioncreator里的方法生成action对象
+         store.dispatch(removeUserSync());//触发更新的方法，需要传一个action对象
+          history.push('/login')
+        }
       }else{
         //服务器没有返回响应：请求还没给服务器，还未接收服务器的响应，请求就终止了
         if(error.message.indexOf('Network Error') !== -1){

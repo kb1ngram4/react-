@@ -1,9 +1,13 @@
 import React, {Component } from 'react';
+import WithCheckLogin from '../../containers/with-check-login';
 
-export default class NotFound extends Component{
+@WithCheckLogin
+ class NotFound extends Component{
   render(){
     return (
       <div>404~~~~</div>
     )
   }
 }
+
+export default NotFound;

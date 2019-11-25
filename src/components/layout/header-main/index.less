@@ -1,0 +1,42 @@
+.header-main{
+  height: 100px;
+  background-color: #fff;
+  
+  .header-main-top{
+    padding-right: 10px;
+    line-height: 60px;
+    text-align: right;
+    background-color: #f40;
+    border-bottom: 1px solid green;
+    .lang-btn{
+      margin: 0 10px;
+    }
+  }
+  .header-main-bottom{
+    line-height: 39px;
+    display: flex;
+    padding-right: 17px;
+    h3{
+      position: relative;
+      flex: 1;
+      text-align: center;
+      &::before{
+        content: '';
+        display: block;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -40px;
+        border-top: 20px solid #fff;
+        border-bottom: 20px solid transparent;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+
+      }
+    }
+    span{
+      flex: 2;
+      text-align: right;
+    }
+  }
+}
