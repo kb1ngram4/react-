@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Menu, Icon } from 'antd';
+import{ withTranslation }from 'react-i18next'
 import {Link,withRouter}from 'react-router-dom';
 import PropTypes from 'prop-types';
 import logo from '../../../assets/logo.png';
@@ -7,6 +8,7 @@ import './index.less';
 import menus from '../../../config/menus';
 const { SubMenu } = Menu;
 //装饰器语法
+@withTranslation()
 @withRouter
 class LeftSider extends Component{
   static propTypes = {
@@ -17,13 +19,14 @@ class LeftSider extends Component{
   }
   //得return出去
   createMenus = (menus)=>menus.map((menu)=>{
+    const {t} = this.props;
       if(menu.children){
         return <SubMenu
             key={menu.path}
             title={
               <span>
                 <Icon type={menu.icon} />
-                <span>{menu.title}</span>
+                <span>{t("layout.leftNav."+menu.title)}</span>
               </span>
             }
           >
@@ -37,12 +40,15 @@ class LeftSider extends Component{
         return this.createCMenus(menu)
       }
     })
-  createCMenus = cmenu =><Menu.Item key={cmenu.path}>
+  createCMenus = cmenu =>{
+    const {t} = this.props;
+           return( <Menu.Item key={cmenu.path}>
                   <Link to={cmenu.path}>
                     <Icon type={cmenu.icon} />
-                    <span>{cmenu.title}</span>
+                    <span>{t("layout.leftNav."+cmenu.title)}</span>
                   </Link>
                 </Menu.Item>
+                )}
   
   findOpenKey = (menus,pathname)=>{
     for (let index = 0; index < menus.length; index++) {
@@ -56,19 +62,17 @@ class LeftSider extends Component{
     }
   }
   //只需要创建一次菜单所以在componentDidMount(){}写，需要初始化状态
-  componentDidMount(){
-    //触发更新，重新渲染
-    this.setState({
-      menus:this.createMenus(menus)
-    })
-  }
+  
   render(){
+    const {t}= this.props
    const {pathname} = this.props.location;
    const openKey = this.findOpenKey(menus,pathname);
+   //重复调用
+   const menuList = this.createMenus(menus)
    return <div>
             <div className="logo">
               <img src={logo} alt="logo"/>
-              <h1 style = {{display:this.props.isDisplay?"block":"none"}}>硅谷后台</h1>
+              <h1 style = {{display:this.props.isDisplay?"block":"none"}}>{t("layout.leftNav.title")}</h1>
             </div>
             <Menu 
               theme="dark" 
@@ -76,7 +80,8 @@ class LeftSider extends Component{
               defaultOpenKeys= {[openKey]} 
               mode="inline"
             >
-              {this.state.menus} 
+
+              {menuList} 
             </Menu>
             </div>
   }
