@@ -24,10 +24,11 @@ class BasicLayout extends Component {
   render() {
     //解构赋值
     const {collapsed,isDisplay} = this.state
+    
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
-        <LeftSider isDisplay = {isDisplay} />
+          <LeftSider isDisplay = {isDisplay} />
         </Sider>
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }}>

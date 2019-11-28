@@ -17,19 +17,19 @@ export default class App extends Component{
       <Suspense fallback={<Spin size= "large" className = "lazy-loding" />}>
         <Router history = {history}>
           <Switch>
-          {unAuthRoutes.map((route,index)=>{
-            return <Route {...route} key={index}/>
-          })}
-          <BasicLayout>
+            {unAuthRoutes.map((route,index)=>{
+              return <Route {...route} key={index}/>
+            })}
+            <BasicLayout>
         {/* switch保证匹配所有规则中的一个，且从上之下 */}
-        <Switch>
-        {
-           authRoutes.map((route,index)=>{
-            return <Route {...route} key={index}/>
-          })
-        }
-        </Switch>
-        </BasicLayout>
+              <Switch>
+              {
+                authRoutes.map((route,index)=>{
+                  return <Route {...route} key={index}/>
+                })
+              }
+              </Switch>
+            </BasicLayout>
           </Switch>
       </Router>
       </Suspense>
